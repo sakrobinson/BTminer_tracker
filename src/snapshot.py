@@ -56,7 +56,7 @@ def main():
     filename = os.path.join(script_dir, 'hotkeys.log')  # Path to the log file
 
     last_reported_block = None
-    report_every_n_blocks = 150
+    report_every_n_blocks = 100
 
     while True:
         current_block = get_current_block_number(sub)
