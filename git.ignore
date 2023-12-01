@@ -1,6 +1,6 @@
 *.csv
 *.txt
 *.log
-src/bittensor_snapshot.log
+src/hotkeys.log
 src/coldkey.txt
 src/hotkey_names.csv
