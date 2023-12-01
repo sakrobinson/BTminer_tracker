@@ -12,7 +12,7 @@ BTminer_tracker is designed to monitor and visualize various metrics related to 
 - **Python Version**: Latest version of Python 3
 - **Dependencies**:
   - Bittensor
-  - Subtensor Node
+  - Local Subtensor Node
   - PM2 (Process Manager)
   - Pandas
   - Matplotlib
@@ -21,22 +21,29 @@ BTminer_tracker is designed to monitor and visualize various metrics related to 
 ## Installation
 
 1. **Clone the Repository**:
-   \```git clone https://github.com/evlar/BTminer_tracker.git
-   \```
+   
+```python
+   git clone https://github.com/evlar/BTminer_tracker.git
+```
+
 2. **Install Dependencies**:
    Navigate to the project directory and run:
-   \```bash
+
+ ```python
    pip install -r requirements.txt
-   \```
+ ```
+
    This command will install all the required Python packages.
 
 ## Usage
 
 To start the application:
 1. Run `run.py`:
-   \```bash
+
+```python
    python3 run.py
-   \```
+
+``` 
    This will launch the main menu of the program.
 
 2. Follow the on-screen instructions to:
@@ -49,19 +56,3 @@ To start the application:
 - **Coldkey Setup**: On the first run, you'll be prompted to enter your coldkey address. This is crucial for fetching and associating data with your specific blockchain account.
 
 - **Hotkey Management**: Use the functionality to assign meaningful names to your hotkeys for easier identification in logs and visualizations.
-
-## Contributing
-
-[Guidelines for contributing to BTminer_tracker]
-
-## Support
-
-[Instructions on how to report issues or seek help]
-
-## License
-
-[License information or statement]
-
-## Additional Information
-
-[Any other relevant information or links]
