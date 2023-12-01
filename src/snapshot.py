@@ -53,10 +53,10 @@ def main():
 
     coldkey_address = read_coldkey_address()
     script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the script
-    filename = os.path.join(script_dir, 'bittensor_snapshot.log')  # Path to the log file
+    filename = os.path.join(script_dir, 'hotkeys.log')  # Path to the log file
 
     last_reported_block = None
-    report_every_n_blocks = 100
+    report_every_n_blocks = 150
 
     while True:
         current_block = get_current_block_number(sub)

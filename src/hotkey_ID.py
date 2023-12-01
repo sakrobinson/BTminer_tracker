@@ -40,7 +40,7 @@ def rename_hotkeys(df):
 
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    log_file_path = os.path.join(script_dir, 'bittensor_snapshot.log')
+    log_file_path = os.path.join(script_dir, 'hotkeys.log')
     hotkey_file_path = os.path.join(script_dir, 'hotkey_names.csv')
 
     unique_hotkeys = load_hotkeys_from_snapshot(log_file_path)

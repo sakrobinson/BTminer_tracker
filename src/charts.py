@@ -89,12 +89,25 @@ def select_hotkey(df, hotkey_names):
     return None
 
 def main():
-    filename = 'bittensor_snapshot.log'
+    # Get the directory where charts.py is located
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Construct the full paths to the data files
+    filename = os.path.join(current_dir, 'hotkeys.log')
+    hotkey_names_file = os.path.join(current_dir, 'hotkey_names.csv')
+
+    # Load the hotkey names
+    if not os.path.exists(hotkey_names_file):
+        print(f"Error: The file {hotkey_names_file} was not found.")
+        return  # Exit the function if the file is not found
+    hotkey_names = load_hotkey_names(hotkey_names_file)
+
+    # Load the data
+    if not os.path.exists(filename):
+        print(f"Error: The file {filename} was not found.")
+        return  # Exit the function if the file is not found
     df = pd.read_csv(filename)
     df['timestamp'] = pd.to_datetime(df['timestamp'])  # Ensure timestamp is in datetime format for all functions
-
-    hotkey_names_file = 'hotkey_names.csv'
-    hotkey_names = load_hotkey_names(hotkey_names_file)
 
     while True:  # Main loop
         print("\nColumns in the DataFrame:", df.columns.tolist())
@@ -143,7 +156,7 @@ def main():
         elif main_choice == '3':
             break  # Exit the script
         else:
-            print("Invalid choice. Please try again.")
+            print("Invalid choice. Please enter a number between 1 and 4.")
 
 if __name__ == "__main__":
     main()
