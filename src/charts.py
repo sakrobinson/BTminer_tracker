@@ -115,7 +115,7 @@ def main():
         print("\nSelect an action:")
         print("1. Plot variable for a single hotkey")
         print("2. Plot all hotkeys")
-        print("3. Exit script")
+        print("3. Return to main menu")
         main_choice = input("Enter your choice: ")
 
         if main_choice == '1':
@@ -125,7 +125,7 @@ def main():
                     print("\nSelect the variable to visualize:")
                     print("1. Emission")
                     print("2. Stake")
-                    print("3. Exit to main menu")
+                    print("3. Return to previous menu")
                     choice = input("Enter your choice: ")
 
                     if choice == '1':
