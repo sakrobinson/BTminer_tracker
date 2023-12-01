@@ -41,6 +41,7 @@ To start the application:
 1. Run `run.py`:
 
 ```python
+   cd BTminer_tracker
    python3 run.py
 
 ``` 
