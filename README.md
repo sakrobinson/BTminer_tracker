@@ -21,8 +21,7 @@ BTminer_tracker is designed to monitor and visualize various metrics related to 
 ## Installation
 
 1. **Clone the Repository**:
-   \```bash
-   git clone [repository URL]
+   \```git clone https://github.com/evlar/BTminer_tracker.git
    \```
 2. **Install Dependencies**:
    Navigate to the project directory and run:
