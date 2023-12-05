@@ -2,6 +2,7 @@ import os
 import time
 import bittensor as bt
 import pandas as pd
+import sys
 
 def read_coldkey_address():
     script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the script
@@ -46,9 +47,15 @@ def get_current_block_number(subtensor):
         return None
 
 def main():
+    # New code: Read endpoint from command line argument
+    if len(sys.argv) > 1:
+        chain_endpoint = sys.argv[1]
+    else:
+        chain_endpoint = "ws://127.0.0.1:9944"  # Default to local if no argument is provided
+
     config = bt.subtensor.config()
     config.subtensor.network = "local"
-    config.subtensor.chain_endpoint = "ws://127.0.0.1:9944"
+    config.subtensor.chain_endpoint = chain_endpoint
     sub = bt.subtensor(config=config)
 
     coldkey_address = read_coldkey_address()
