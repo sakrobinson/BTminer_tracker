@@ -1,6 +1,9 @@
 import os
 import subprocess
 
+# Function to print text in colored format
+def color_text(text, text_color=37, background_color=40, bold=False):
+    return f"\033[{';'.join([str(1 if bold else 0), str(text_color), str(background_color)])}m{text}\033[0m"
 
 def main_menu():
     src_dir = os.path.dirname(os.path.abspath(__file__))
@@ -44,7 +47,10 @@ def main_menu():
             subprocess.run(['python3', os.path.join(src_dir, 'charts.py')])
 
         elif choice == '4':
-            print("Exiting...")
+            # Final message
+            print("\n" + color_text("Thank you for using BTminer_tracker!\nDonations gratefully received to: ", text_color=33, background_color=40) +
+                color_text("5C5a4aGX8zfApCRY2W3Cs9MBwmBjpMDZhVqemzy1rbg632Uo", text_color=32, background_color=40, bold=True))
+
             break
 
         else:

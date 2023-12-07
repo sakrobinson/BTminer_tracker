@@ -5,7 +5,7 @@ import pandas as pd
 import os
 
 def load_hotkey_names(file_path):
-    if os.path.exists(file_path):  # Use os.path.exists
+    if os.path.exists(file_path):  
         return pd.read_csv(file_path).set_index('hotkey').to_dict()['hotkey_name']
     return {}
 
@@ -51,7 +51,7 @@ def plot_combined_hotkeys(df, variable, hotkey_names):
 
 def plot_variable(filename, variable, hotkey):
     df = pd.read_csv(filename)
-    df['timestamp'] = pd.to_datetime(df['timestamp'])  # Convert timestamp column to datetime
+    df['timestamp'] = pd.to_datetime(df['timestamp'])  
     df_filtered = df[df['hotkey'] == hotkey]
     
     plt.figure(figsize=(10, 6))
@@ -107,10 +107,10 @@ def main():
         print(f"Error: The file {filename} was not found.")
         return  # Exit the function if the file is not found
     df = pd.read_csv(filename)
-    df['timestamp'] = pd.to_datetime(df['timestamp'])  # Ensure timestamp is in datetime format for all functions
+    df['timestamp'] = pd.to_datetime(df['timestamp'])  
 
     while True:  # Main loop
-        print("\nColumns in the DataFrame:", df.columns.tolist())
+        #print("\nColumns in the DataFrame:", df.columns.tolist())
 
         print("\nSelect an action:")
         print("1. Plot variable for a single hotkey")
@@ -121,7 +121,7 @@ def main():
         if main_choice == '1':
             hotkey = select_hotkey(df, hotkey_names)
             if hotkey:
-                while True:  # Variable selection loop for a single hotkey
+                while True:  
                     print("\nSelect the variable to visualize:")
                     print("1. Emission")
                     print("2. Stake")
@@ -133,7 +133,7 @@ def main():
                     elif choice == '2':
                         plot_variable(filename, 'stake', hotkey)
                     elif choice == '3':
-                        break  # Breaks the inner loop and goes back to action selection
+                        break  
                     else:
                         print("Invalid choice. Please try again.")
 
@@ -154,7 +154,7 @@ def main():
                 print("Invalid choice. Please try again.")
 
         elif main_choice == '3':
-            break  # Exit the script
+            break  
         else:
             print("Invalid choice. Please enter a number between 1 and 4.")
 
