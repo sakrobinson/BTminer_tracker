@@ -52,8 +52,13 @@ To start the application:
    - Input/Edit hotkey names.
    - View graphs and analytics.
 
-## Configuration
+## Operation
 
-- **Coldkey Setup**: On the first run, you'll be prompted to enter your coldkey address. This is crucial for fetching and associating data with your specific blockchain account.
+**From the Main Menu:**
+1. **Log Miner Data**: On the first run, you'll be prompted to enter your coldkey address. This will tack all registered hotkeys associated with the address. PM2 must be installed!
 
-- **Hotkey Management**: Use the functionality to assign meaningful names to your hotkeys for easier identification in logs and visualizations.
+2. **Input/Edit Hotkey Names**: Assign meaningful names to your hotkeys for easier identification in logs and visualizations. Repeat this step with each new hotkey registration. *Note: Snapshots occur every 20 minutes (100 blocks)
+
+3. **View Graphs**: Plot emission or stake for single hotkeys or all hotkeys at once.
+
+4. **Exit**: Get on outa here!
