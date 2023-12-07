@@ -5,7 +5,7 @@
 
 ## Description
 
-BTminer_tracker is designed to monitor and visualize various metrics related to blockchain miners, particularly focusing on emission and stake associated with a specific coldkey on the subtensor blockchain. It provides functionality for logging real-time data, configuring miner identifiers (hotkeys), and generating detailed visualizations to analyze trends and performance metrics.
+BTminer_tracker is designed to monitor and visualize emission and stake for registered hotkeys for a given coldkey. It provides functionality for logging real-time data, configuring miner identifiers (hotkeys), and plotting these data.
 
 ## Requirements
 
