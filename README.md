@@ -12,7 +12,7 @@ BTminer_tracker is designed to monitor and visualize various metrics related to 
 - **Python Version**: Latest version of Python 3
 - **Dependencies**:
   - Bittensor
-  - Local Subtensor Node
+  - Local or Remote Subtensor Node
   - PM2 (Process Manager)
   - Pandas
   - Matplotlib
