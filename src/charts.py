@@ -110,8 +110,6 @@ def main():
     df['timestamp'] = pd.to_datetime(df['timestamp'])  
 
     while True:  # Main loop
-        #print("\nColumns in the DataFrame:", df.columns.tolist())
-
         print("\nSelect an action:")
         print("1. Plot variable for a single hotkey")
         print("2. Plot all hotkeys")
@@ -123,40 +121,60 @@ def main():
             if hotkey:
                 while True:  
                     print("\nSelect the variable to visualize:")
-                    print("1. Emission")
-                    print("2. Stake")
-                    print("3. Return to previous menu")
+                    print("1. Stake")
+                    print("2. Trust")
+                    print("3. Consensus")
+                    print("4. Incentive")
+                    print("5. Emission")
+                    print("6. Return to previous menu")
                     choice = input("Enter your choice: ")
 
                     if choice == '1':
-                        plot_variable(filename, 'emission', hotkey)
-                    elif choice == '2':
                         plot_variable(filename, 'stake', hotkey)
+                    elif choice == '2':
+                        plot_variable(filename, 'trust', hotkey)
                     elif choice == '3':
+                        plot_variable(filename, 'consensus', hotkey)
+                    elif choice == '4':
+                        plot_variable(filename, 'incentive', hotkey)
+                    elif choice == '5':
+                        plot_variable(filename, 'emission', hotkey)
+                    elif choice == '6':
                         break  
                     else:
                         print("Invalid choice. Please try again.")
 
         elif main_choice == '2':
             print("\nSelect the variable for comparison across all hotkeys:")
-            print("1. Emission")
-            print("2. Stake")
+            print("1. Stake")
+            print("2. Trust")
+            print("3. Consensus")
+            print("4. Incentive")
+            print("5. Emission")
+            print("6. Return to previous menu")
             comp_choice = input("Enter your choice: ")
             variable = None
+
             if comp_choice == '1':
-                variable = 'emission'
-            elif comp_choice == '2':
                 variable = 'stake'
+            elif comp_choice == '2':
+                variable = 'trust'
+            elif comp_choice == '3':
+                variable = 'consensus'
+            elif comp_choice == '4':
+                variable = 'incentive'
+            elif comp_choice == '5':
+                variable = 'emission'
     
             if variable:
                 plot_combined_hotkeys(df, variable, hotkey_names)
             else:
                 print("Invalid choice. Please try again.")
 
-        elif main_choice == '3':
+        elif main_choice == '6':
             break  
         else:
-            print("Invalid choice. Please enter a number between 1 and 4.")
+            print("Invalid choice. Please enter a number between 1 and 6.")
 
 if __name__ == "__main__":
     main()

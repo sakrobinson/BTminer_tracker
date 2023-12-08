@@ -19,6 +19,7 @@ def fetch_data(subtensor, coldkey_address, block):
         for info in stake_info:
             neurons = subtensor.get_all_neurons_for_pubkey(hotkey_ss58=info.hotkey_ss58, block=block)
             for neuron in neurons:
+                # Assuming the neuron object has the necessary information
                 data_entry = {
                     'timestamp': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime()),
                     'block': block,
@@ -26,11 +27,16 @@ def fetch_data(subtensor, coldkey_address, block):
                     'hotkey': neuron.hotkey,
                     'stake': neuron.stake,
                     'rank': neuron.rank,
-                    'emission': neuron.emission
-                    # Add more fields as needed
+                    'emission': neuron.emission,
+                    # Extracting additional fields from neuron_info
+                    'trust': neuron.trust,
+                    'consensus': neuron.consensus,
+                    'incentive': neuron.incentive
                 }
                 data.append(data_entry)
     return data
+
+
 
 def append_to_log(data, filename):
     df = pd.DataFrame(data)
@@ -47,7 +53,6 @@ def get_current_block_number(subtensor):
         return None
 
 def main():
-    # New code: Read endpoint from command line argument
     if len(sys.argv) > 1:
         chain_endpoint = sys.argv[1]
     else:
@@ -59,11 +64,11 @@ def main():
     sub = bt.subtensor(config=config)
 
     coldkey_address = read_coldkey_address()
-    script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the script
-    filename = os.path.join(script_dir, 'hotkeys.log')  # Path to the log file
+    script_dir = os.path.dirname(os.path.abspath(__file__))  
+    filename = os.path.join(script_dir, 'hotkeys.log')  
 
     last_reported_block = None
-    report_every_n_blocks = 100
+    report_every_n_blocks = 50
 
     while True:
         current_block = get_current_block_number(sub)
@@ -76,7 +81,7 @@ def main():
         else:
             time.sleep(60)
             continue
-        time.sleep(10)  # Adjust as needed for block timing
+        time.sleep(10)  
 
 if __name__ == "__main__":
     main()

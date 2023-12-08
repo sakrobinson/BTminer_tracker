@@ -1,11 +1,11 @@
 
 # BTminer_tracker
 
-**BTminer_tracker**: A program built to track and visualize emission and stake for all your miners on a given coldkey.
+**BTminer_tracker**: A program built to track and visualize variables for all your miners on a given coldkey.
 
 ## Description
 
-BTminer_tracker is designed to monitor and visualize emission and stake for registered hotkeys for a given coldkey. It provides functionality for logging real-time data, configuring miner identifiers (hotkeys), and plotting these data.
+BTminer_tracker is designed to monitor and visualize stake, trust, consensus, incentive, and emission for registered hotkeys for a given coldkey. It provides functionality for logging real-time data, configuring miner identifiers (hotkeys), and plotting these data.
 
 ## Requirements
 
@@ -59,6 +59,6 @@ To start the application:
 
 2. **Input/Edit Hotkey Names**: Assign meaningful names to your hotkeys for easier identification in logs and visualizations. Repeat this step with each new hotkey registration. *Note: Snapshots occur every 20 minutes (100 blocks)
 
-3. **View Graphs**: Plot emission or stake for single hotkeys or all hotkeys at once.
+3. **View Graphs**: Plot stake, trust, consensus, incentive, or emission for select or all hotkeys.
 
 4. **Exit**: Get on outa here!
