@@ -171,7 +171,7 @@ def main():
             else:
                 print("Invalid choice. Please try again.")
 
-        elif main_choice == '6':
+        elif main_choice == '3':
             break  
         else:
             print("Invalid choice. Please enter a number between 1 and 6.")
