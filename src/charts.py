@@ -15,7 +15,7 @@ import pandas as pd
 import os
 
 
-def plot_combined_hotkeys(df, variable, hotkey_names):
+def plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys=[]):
     plt.figure(figsize=(15, 8))
     
     # Ensure the variable is numeric, stripping 'τ' if the variable is 'stake'
@@ -32,6 +32,9 @@ def plot_combined_hotkeys(df, variable, hotkey_names):
 
     # Plot each hotkey's data
     for hotkey in sorted_hotkeys:
+        if hotkey in exclude_hotkeys:  # Skip the excluded hotkeys
+            continue
+
         hotkey_data = df[df['hotkey'] == hotkey]
         if not hotkey_data.empty:
             plt.plot(hotkey_data['timestamp'], hotkey_data[variable], label=hotkey_names.get(hotkey, hotkey), marker='o', linestyle='-')
@@ -48,24 +51,6 @@ def plot_combined_hotkeys(df, variable, hotkey_names):
     plt.tight_layout()
     plt.show()
 
-
-def plot_variable(filename, variable, hotkey):
-    df = pd.read_csv(filename)
-    df['timestamp'] = pd.to_datetime(df['timestamp'])  
-    df_filtered = df[df['hotkey'] == hotkey]
-    
-    plt.figure(figsize=(10, 6))
-    plt.plot(df_filtered['timestamp'], df_filtered[variable], marker='o', markersize=3)
-    plt.title(f'{variable} over time for {hotkey}')
-    plt.xlabel('Time')
-    plt.ylabel(variable)
-    
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
-    plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.grid(True)
-    plt.show()
 
 def select_hotkey(df, hotkey_names):
     unique_hotkeys = df['hotkey'].unique()
@@ -89,31 +74,26 @@ def select_hotkey(df, hotkey_names):
     return None
 
 def main():
-    # Get the directory where charts.py is located
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    
-    # Construct the full paths to the data files
     filename = os.path.join(current_dir, 'hotkeys.log')
     hotkey_names_file = os.path.join(current_dir, 'hotkey_names.csv')
 
-    # Load the hotkey names
     if not os.path.exists(hotkey_names_file):
         print(f"Error: The file {hotkey_names_file} was not found.")
-        return  # Exit the function if the file is not found
+        return
     hotkey_names = load_hotkey_names(hotkey_names_file)
 
-    # Load the data
     if not os.path.exists(filename):
         print(f"Error: The file {filename} was not found.")
-        return  # Exit the function if the file is not found
+        return
     df = pd.read_csv(filename)
     df['timestamp'] = pd.to_datetime(df['timestamp'])  
 
-    while True:  # Main loop
+    while True:
         print("\nSelect an action:")
         print("1. Plot variable for a single hotkey")
         print("2. Plot all hotkeys")
-        print("3. Return to main menu")
+        print("3. Exit")
         main_choice = input("Enter your choice: ")
 
         if main_choice == '1':
@@ -145,6 +125,24 @@ def main():
                         print("Invalid choice. Please try again.")
 
         elif main_choice == '2':
+            exclude_hotkeys = []
+            while True:
+                print("\nDo you want to exclude a hotkey? (yes/no)")
+                exclude_decision = input("Enter your choice: ").lower()
+
+                if exclude_decision == 'yes':
+                    print("Select a hotkey to exclude:")
+                    exclude_hotkey = select_hotkey(df, hotkey_names)
+                    if exclude_hotkey and exclude_hotkey not in exclude_hotkeys:
+                        exclude_hotkeys.append(exclude_hotkey)
+
+                    print("Would you like to exclude another hotkey? (yes/no)")
+                    another_exclude_decision = input("Enter your choice: ").lower()
+                    if another_exclude_decision != 'yes':
+                        break
+                else:
+                    break
+
             print("\nSelect the variable for comparison across all hotkeys:")
             print("1. Stake")
             print("2. Trust")
@@ -165,16 +163,18 @@ def main():
                 variable = 'incentive'
             elif comp_choice == '5':
                 variable = 'emission'
+            elif comp_choice == '6':
+                continue
     
             if variable:
-                plot_combined_hotkeys(df, variable, hotkey_names)
+                plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys)
             else:
                 print("Invalid choice. Please try again.")
 
         elif main_choice == '3':
-            break  
+            break
         else:
-            print("Invalid choice. Please enter a number between 1 and 6.")
+            print("Invalid choice. Please enter a number between 1 and 3.")
 
 if __name__ == "__main__":
     main()
