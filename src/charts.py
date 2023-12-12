@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from matplotlib.ticker import FormatStrFormatter
 import pandas as pd
 import os
 
@@ -9,16 +8,10 @@ def load_hotkey_names(file_path):
         return pd.read_csv(file_path).set_index('hotkey').to_dict()['hotkey_name']
     return {}
 
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import pandas as pd
-import os
-
-
 def plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys=[]):
     plt.figure(figsize=(15, 8))
     
-    # Ensure the variable is numeric, stripping 'τ' if the variable is 'stake'
+    # Convert 'stake' variable to numeric if needed
     if variable == 'stake':
         df[variable] = df[variable].str.replace('τ', '').astype(float)
     
@@ -30,9 +23,9 @@ def plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys=[]):
     unique_hotkeys = df['hotkey'].unique()
     sorted_hotkeys = sorted(unique_hotkeys, key=lambda x: hotkey_names.get(x, 'Unknown'))
 
-    # Plot each hotkey's data
+    # Plot data for each hotkey, excluding specified hotkeys
     for hotkey in sorted_hotkeys:
-        if hotkey in exclude_hotkeys:  # Skip the excluded hotkeys
+        if hotkey in exclude_hotkeys:
             continue
 
         hotkey_data = df[df['hotkey'] == hotkey]
@@ -52,10 +45,13 @@ def plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys=[]):
     plt.show()
 
 
-def select_hotkey(df, hotkey_names):
+def select_hotkey(df, hotkey_names, list_all=False):
     unique_hotkeys = df['hotkey'].unique()
     hotkeys_with_names = [(key, hotkey_names.get(key, 'Unknown')) for key in unique_hotkeys]
-    hotkeys_with_names.sort(key=lambda x: x[1])  # Sort by hotkey name
+    hotkeys_with_names.sort(key=lambda x: x[1])
+
+    if list_all:
+        return hotkeys_with_names
 
     print("Available hotkeys:")
     for idx, (key, name) in enumerate(hotkeys_with_names, 1):
@@ -72,6 +68,30 @@ def select_hotkey(df, hotkey_names):
     except ValueError:
         print("Invalid input. Please enter a number.")
     return None
+
+def plot_variable(df, variable, hotkey, hotkey_names):
+    plt.figure(figsize=(15, 8))
+    
+    if variable == 'stake':
+        df[variable] = df[variable].str.replace('τ', '').astype(float)
+
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    df.sort_values('timestamp', inplace=True)
+
+    hotkey_data = df[df['hotkey'] == hotkey]
+    if not hotkey_data.empty:
+        plt.plot(hotkey_data['timestamp'], hotkey_data[variable], label=hotkey_names.get(hotkey, hotkey), marker='o', linestyle='-')
+
+    plt.title(f'{variable.capitalize()} over time for {hotkey_names.get(hotkey, hotkey)}')
+    plt.xlabel('Time')
+    plt.ylabel(variable.capitalize())
+    plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
 
 def main():
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -99,49 +119,57 @@ def main():
         if main_choice == '1':
             hotkey = select_hotkey(df, hotkey_names)
             if hotkey:
-                while True:  
-                    print("\nSelect the variable to visualize:")
-                    print("1. Stake")
-                    print("2. Trust")
-                    print("3. Consensus")
-                    print("4. Incentive")
-                    print("5. Emission")
-                    print("6. Return to previous menu")
-                    choice = input("Enter your choice: ")
+                print("\nSelect the variable to visualize:")
+                print("1. Stake")
+                print("2. Trust")
+                print("3. Consensus")
+                print("4. Incentive")
+                print("5. Emission")
+                print("6. Return to previous menu")
+                choice = input("Enter your choice: ")
 
-                    if choice == '1':
-                        plot_variable(filename, 'stake', hotkey)
-                    elif choice == '2':
-                        plot_variable(filename, 'trust', hotkey)
-                    elif choice == '3':
-                        plot_variable(filename, 'consensus', hotkey)
-                    elif choice == '4':
-                        plot_variable(filename, 'incentive', hotkey)
-                    elif choice == '5':
-                        plot_variable(filename, 'emission', hotkey)
-                    elif choice == '6':
-                        break  
-                    else:
-                        print("Invalid choice. Please try again.")
+                variable_map = {
+                    '1': 'stake',
+                    '2': 'trust',
+                    '3': 'consensus',
+                    '4': 'incentive',
+                    '5': 'emission'
+                }
+
+                variable = variable_map.get(choice)
+                if variable:
+                    plot_variable(df, variable, hotkey, hotkey_names)
+                elif choice == '6':
+                    continue
+                else:
+                    print("Invalid choice. Please try again.")
 
         elif main_choice == '2':
             exclude_hotkeys = []
-            while True:
-                print("\nDo you want to exclude a hotkey? (yes/no)")
-                exclude_decision = input("Enter your choice: ").lower()
+            hotkeys_with_names = select_hotkey(df, hotkey_names, list_all=True)  # Get all hotkeys with names
+            
+            print("\nDo you want to exclude any hotkeys? (yes/no)")
+            exclude_decision = input("Enter your choice: ").lower()
 
-                if exclude_decision == 'yes':
-                    print("Select a hotkey to exclude:")
-                    exclude_hotkey = select_hotkey(df, hotkey_names)
-                    if exclude_hotkey and exclude_hotkey not in exclude_hotkeys:
-                        exclude_hotkeys.append(exclude_hotkey)
-
-                    print("Would you like to exclude another hotkey? (yes/no)")
-                    another_exclude_decision = input("Enter your choice: ").lower()
-                    if another_exclude_decision != 'yes':
-                        break
-                else:
-                    break
+            if exclude_decision == 'yes':
+                print("Select hotkeys to exclude (enter numbers separated by commas, e.g., 1,2,3):")
+                for idx, (key, name) in enumerate(hotkeys_with_names, 1):
+                    print(f"{idx}. {key} ({name})")
+                
+                choices = input("Enter hotkey numbers or 'exit' to quit: ")
+                if choices.lower() != 'exit':
+                    try:
+                        selected_indexes = [int(choice.strip()) - 1 for choice in choices.split(',')]
+                        for index in selected_indexes:
+                            if 0 <= index < len(hotkeys_with_names):
+                                exclude_hotkey = hotkeys_with_names[index][0]
+                                if exclude_hotkey not in exclude_hotkeys:
+                                    exclude_hotkeys.append(exclude_hotkey)
+                                    print(f"Excluded hotkey: {exclude_hotkey}")
+                            else:
+                                print(f"Warning: Invalid selection '{index + 1}'. It will be ignored.")
+                    except ValueError:
+                        print("Invalid input. Please enter numbers separated by commas.")
 
             print("\nSelect the variable for comparison across all hotkeys:")
             print("1. Stake")
@@ -153,23 +181,22 @@ def main():
             comp_choice = input("Enter your choice: ")
             variable = None
 
-            if comp_choice == '1':
-                variable = 'stake'
-            elif comp_choice == '2':
-                variable = 'trust'
-            elif comp_choice == '3':
-                variable = 'consensus'
-            elif comp_choice == '4':
-                variable = 'incentive'
-            elif comp_choice == '5':
-                variable = 'emission'
-            elif comp_choice == '6':
-                continue
-    
+            variable_map = {
+                '1': 'stake',
+                '2': 'trust',
+                '3': 'consensus',
+                '4': 'incentive',
+                '5': 'emission'
+            }
+
+            variable = variable_map.get(comp_choice)
             if variable:
                 plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys)
+            elif comp_choice == '6':
+                pass  # Return to the main menu
             else:
                 print("Invalid choice. Please try again.")
+
 
         elif main_choice == '3':
             break
