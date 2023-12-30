@@ -1,6 +1,4 @@
-Certainly! Here's an updated version of your README to reflect the new text-based visualization feature:
 
-```markdown
 # BTminer_tracker
 
 **BTminer_tracker**: A program built to track and visualize variables for all your miners on a given coldkey.
