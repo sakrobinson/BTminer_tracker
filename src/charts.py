@@ -9,7 +9,7 @@ def load_hotkey_names(file_path):
         return pd.read_csv(file_path).set_index('hotkey').to_dict()['hotkey_name']
     return {}
 
-def plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys=[], visualization_mode):
+def plot_combined_hotkeys(df, variable, hotkey_names, visualization_mode, exclude_hotkeys=[]):
     
     
     # Convert 'stake' variable to numeric if needed
