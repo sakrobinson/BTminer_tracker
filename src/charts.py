@@ -9,7 +9,7 @@ def load_hotkey_names(file_path):
         return pd.read_csv(file_path).set_index('hotkey').to_dict()['hotkey_name']
     return {}
 
-def plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys=[]):
+def plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys=[], visualization_mode):
     
     
     # Convert 'stake' variable to numeric if needed
@@ -87,7 +87,7 @@ def select_hotkey(df, hotkey_names, list_all=False):
         print("Invalid input. Please enter a number.")
     return None
 
-def plot_variable(df, variable, hotkey, hotkey_names):
+def plot_variable(df, variable, hotkey, hotkey_names, visualization_mode):
     
     
     if variable == 'stake':
@@ -123,7 +123,7 @@ def plot_variable(df, variable, hotkey, hotkey_names):
         plt.tight_layout()
         plt.show()
 
-def main():
+def main(visualization_mode):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     filename = os.path.join(current_dir, 'hotkeys.log')
     hotkey_names_file = os.path.join(current_dir, 'hotkey_names.csv')
@@ -168,7 +168,7 @@ def main():
 
                 variable = variable_map.get(choice)
                 if variable:
-                    plot_variable(df, variable, hotkey, hotkey_names)
+                    plot_variable(df, variable, hotkey, hotkey_names, visualization_mode)
                 elif choice == '6':
                     continue
                 else:
@@ -221,7 +221,7 @@ def main():
 
             variable = variable_map.get(comp_choice)
             if variable:
-                plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys)
+                plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys, visualization_mode)
             elif comp_choice == '6':
                 pass  # Return to the main menu
             else:
@@ -234,4 +234,7 @@ def main():
             print("Invalid choice. Please enter a number between 1 and 3.")
 
 if __name__ == "__main__":
-    main()
+    # Capture user input for visualization mode here
+    visualization_mode = input("Enter visualization mode (1 for text, 2 for graphical): ")
+    main(visualization_mode)
+
