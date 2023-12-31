@@ -38,18 +38,20 @@ def plot_combined_hotkeys(df, variable, hotkey_names, visualization_mode, exclud
                 print(f"\n{hotkey_names.get(hotkey, hotkey)}:")
                 # Plot using asciichartpy
                 print(asciichartpy.plot(values, {'height': 10}))
+                
     else:
         # Use graphical visualization
+        plt.figure(figsize=(15, 8)) 
+
         # Plot data for each hotkey, excluding specified hotkeys
         for hotkey in sorted_hotkeys:
             if hotkey in exclude_hotkeys:
                 continue
-    
+
             hotkey_data = df[df['hotkey'] == hotkey]
             if not hotkey_data.empty:
-                plt.figure(figsize=(15, 8))
                 plt.plot(hotkey_data['timestamp'], hotkey_data[variable], label=hotkey_names.get(hotkey, hotkey), marker='o', linestyle='-')
-    
+
         # Formatting the plot
         plt.title(f'{variable.capitalize()} over time for all hotkeys')
         plt.xlabel('Time')
@@ -60,7 +62,8 @@ def plot_combined_hotkeys(df, variable, hotkey_names, visualization_mode, exclud
         plt.legend()
         plt.grid(True)
         plt.tight_layout()
-        plt.show()
+        plt.show()  # This will display the plot with all hotkeys
+
 
 
 def select_hotkey(df, hotkey_names, list_all=False):
