@@ -14,7 +14,8 @@ def plot_combined_hotkeys(df, variable, hotkey_names, visualization_mode, exclud
     
     # Convert 'stake' variable to numeric if needed
     if variable == 'stake':
-        df[variable] = df[variable].str.replace('τ', '').astype(float)
+        df[variable] = df[variable].str.replace('τ', '').str.replace(',', '').astype(float)
+
     
     # Convert timestamps to datetime and sort
     df['timestamp'] = pd.to_datetime(df['timestamp'])
