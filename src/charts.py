@@ -128,6 +128,34 @@ def plot_variable(df, variable, hotkey, hotkey_names, visualization_mode):
         plt.show()
 
 def main(visualization_mode):
+    # ... existing code ...
+
+
+
+    while True:
+        print("\nSelect an action:")
+        print("1. Plot variable for a single hotkey")
+        print("2. Plot all hotkeys")
+        print("3. Exit")
+        main_choice = input("Enter your choice: ")
+
+        if main_choice == '1':
+            # ... existing code for plotting a single hotkey ...
+        elif main_choice == '2':
+            if visualization_mode == '1':
+                # If in text mode, display the message and continue the loop
+                print("Sorry, this is not supported in text (ASCII) mode. We hope to work around this in a future release!")
+                continue
+            else:
+                # If in graphical mode, proceed with plotting all hotkeys
+                # ... existing code for plotting all hotkeys ...
+        elif main_choice == '3':
+            break
+        else:
+            print("Invalid choice. Please enter a number between 1 and 3.")
+
+
+def main(visualization_mode):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     filename = os.path.join(current_dir, 'hotkeys.log')
     hotkey_names_file = os.path.join(current_dir, 'hotkey_names.csv')
@@ -142,7 +170,7 @@ def main(visualization_mode):
         return
     df = pd.read_csv(filename)
     df['timestamp'] = pd.to_datetime(df['timestamp'])  
-
+    
     while True:
         print("\nSelect an action:")
         print("1. Plot variable for a single hotkey")
@@ -179,63 +207,71 @@ def main(visualization_mode):
                     print("Invalid choice. Please try again.")
 
         elif main_choice == '2':
-            exclude_hotkeys = []
-            hotkeys_with_names = select_hotkey(df, hotkey_names, list_all=True)  # Get all hotkeys with names
-            
-            print("\nDo you want to exclude any hotkeys? (yes/no)")
-            exclude_decision = input("Enter your choice: ").lower()
-
-            if exclude_decision == 'yes':
-                print("Select hotkeys to exclude (enter numbers separated by commas, e.g., 1,2,3):")
-                for idx, (key, name) in enumerate(hotkeys_with_names, 1):
-                    print(f"{idx}. {key} ({name})")
+            if visualization_mode == '1':
+                # If in text mode, display the message and continue the loop
+                print("Sorry, this is not supported in text (ASCII) mode. We hope to work around this in a future release!")
+                continue
+            else:        
+                exclude_hotkeys = []
+                hotkeys_with_names = select_hotkey(df, hotkey_names, list_all=True)  # Get all hotkeys with names
                 
-                choices = input("Enter hotkey numbers or 'exit' to quit: ")
-                if choices.lower() != 'exit':
-                    try:
-                        selected_indexes = [int(choice.strip()) - 1 for choice in choices.split(',')]
-                        for index in selected_indexes:
-                            if 0 <= index < len(hotkeys_with_names):
-                                exclude_hotkey = hotkeys_with_names[index][0]
-                                if exclude_hotkey not in exclude_hotkeys:
-                                    exclude_hotkeys.append(exclude_hotkey)
-                                    print(f"Excluded hotkey: {exclude_hotkey}")
-                            else:
-                                print(f"Warning: Invalid selection '{index + 1}'. It will be ignored.")
-                    except ValueError:
-                        print("Invalid input. Please enter numbers separated by commas.")
-
-            print("\nSelect the variable for comparison across all hotkeys:")
-            print("1. Stake")
-            print("2. Trust")
-            print("3. Consensus")
-            print("4. Incentive")
-            print("5. Emission")
-            print("6. Return to previous menu")
-            comp_choice = input("Enter your choice: ")
-            variable = None
-
-            variable_map = {
-                '1': 'stake',
-                '2': 'trust',
-                '3': 'consensus',
-                '4': 'incentive',
-                '5': 'emission'
-            }
-
-            variable = variable_map.get(comp_choice)
-            if variable:
-                plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys, visualization_mode)
-            elif comp_choice == '6':
-                pass  # Return to the main menu
-            else:
-                print("Invalid choice. Please try again.")
-
+                print("\nDo you want to exclude any hotkeys? (yes/no)")
+                exclude_decision = input("Enter your choice: ").lower()
+    
+                if exclude_decision == 'yes':
+                    print("Select hotkeys to exclude (enter numbers separated by commas, e.g., 1,2,3):")
+                    for idx, (key, name) in enumerate(hotkeys_with_names, 1):
+                        print(f"{idx}. {key} ({name})")
+                    
+                    choices = input("Enter hotkey numbers or 'exit' to quit: ")
+                    if choices.lower() != 'exit':
+                        try:
+                            selected_indexes = [int(choice.strip()) - 1 for choice in choices.split(',')]
+                            for index in selected_indexes:
+                                if 0 <= index < len(hotkeys_with_names):
+                                    exclude_hotkey = hotkeys_with_names[index][0]
+                                    if exclude_hotkey not in exclude_hotkeys:
+                                        exclude_hotkeys.append(exclude_hotkey)
+                                        print(f"Excluded hotkey: {exclude_hotkey}")
+                                else:
+                                    print(f"Warning: Invalid selection '{index + 1}'. It will be ignored.")
+                        except ValueError:
+                            print("Invalid input. Please enter numbers separated by commas.")
+    
+                print("\nSelect the variable for comparison across all hotkeys:")
+                print("1. Stake")
+                print("2. Trust")
+                print("3. Consensus")
+                print("4. Incentive")
+                print("5. Emission")
+                print("6. Return to previous menu")
+                comp_choice = input("Enter your choice: ")
+                variable = None
+    
+                variable_map = {
+                    '1': 'stake',
+                    '2': 'trust',
+                    '3': 'consensus',
+                    '4': 'incentive',
+                    '5': 'emission'
+                }
+    
+                variable = variable_map.get(comp_choice)
+                if variable:
+                    plot_combined_hotkeys(df, variable, hotkey_names, exclude_hotkeys, visualization_mode)
+                elif comp_choice == '6':
+                    pass  # Return to the main menu
+                else:
+                    print("Invalid choice. Please try again.")
 
         elif main_choice == '3':
             break
         else:
             print("Invalid choice. Please enter a number between 1 and 3.")
+
+
+
+
 
 if __name__ == "__main__":
     # Capture user input for visualization mode here
